@@ -28,9 +28,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::middleware('role:admin')->group(function () {
-        Route::resource('gurus', GuruController::class);
-        Route::resource('siswas', SiswaController::class);
-        Route::resource('kelas', KelasController::class);
+        Route::resource('guru', GuruController::class);
+        Route::resource('siswa', SiswaController::class);
+        Route::resource('kelas', KelasController::class)->parameters([
+            'kelas' => 'kelas'
+        ]);
         Route::resource('mapels', MapelController::class);
         Route::resource('jadwals', JadwalController::class);
     });
