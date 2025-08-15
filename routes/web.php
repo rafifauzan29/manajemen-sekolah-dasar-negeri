@@ -33,8 +33,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('kelas', KelasController::class)->parameters([
             'kelas' => 'kelas'
         ]);
-        Route::resource('mapels', MapelController::class);
-        Route::resource('jadwals', JadwalController::class);
+        Route::resource('mapel', MapelController::class);
+        Route::resource('jadwal', JadwalController::class);
     });
 
     Route::middleware('role:guru')->group(function () {

@@ -21,11 +21,22 @@ class UserSeeder extends Seeder
         ]);
         $admin->assignRole($adminRole);
 
-        $guru = User::create([
-            'name' => 'Guru SDN Cikijing 3',
+        $guruUtama = User::create([
+            'name' => 'Guru Utama',
             'email' => 'guru@cikijing3.sch.id',
             'password' => Hash::make('guru123'),
         ]);
-        $guru->assignRole($guruRole);
+        $guruUtama->assignRole($guruRole);
+
+        for ($tingkat = 1; $tingkat <= 6; $tingkat++) {
+            foreach (['A', 'B'] as $huruf) {
+                $guru = User::create([
+                    'name' => "Guru Kelas {$tingkat}{$huruf}",
+                    'email' => strtolower("guru{$tingkat}{$huruf}@cikijing3.sch.id"),
+                    'password' => Hash::make('guru123'),
+                ]);
+                $guru->assignRole($guruRole);
+            }
+        }
     }
 }

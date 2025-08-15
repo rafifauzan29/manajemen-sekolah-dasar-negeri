@@ -5,9 +5,9 @@
 
 @section('content')
     <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h2 class="text-2xl font-bold text-gray-800">Daftar Kelas</h2>
+        <h2 class="text-2xl font-bold text-gray-800">📋 Daftar Kelas</h2>
         <a href="{{ route('kelas.create') }}"
-            class="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition w-full sm:w-auto justify-center">
+            class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-lg shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-indigo-700 transition-all w-full sm:w-auto justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -15,45 +15,40 @@
         </a>
     </div>
 
-    {{-- Desktop & Tablet --}}
-    <div class="hidden md:block overflow-x-auto bg-white rounded-lg shadow">
-        <table class="w-full">
+    <!-- Desktop & Tablet -->
+    <div class="hidden md:block overflow-x-auto bg-white rounded-xl shadow-lg border border-gray-100">
+        <table class="w-full text-sm text-gray-700">
             <thead>
-                <tr class="bg-gray-50 border-b border-gray-200">
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Nama Kelas</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-600">Wali Kelas</th>
-                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-600">Aksi</th>
+                <tr class="bg-gradient-to-r from-blue-50 to-indigo-50">
+                    <th class="px-6 py-3 text-left font-semibold">Nama Kelas</th>
+                    <th class="px-6 py-3 text-left font-semibold">Wali Kelas</th>
+                    <th class="px-6 py-3 text-center font-semibold">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($kelas as $k)
-                    <tr class="border-b hover:bg-gray-50 transition">
-                        <td class="px-6 py-3 text-gray-800">{{ $k->nama_kelas }}</td>
-                        <td class="px-6 py-3 text-gray-600">
-                            {{ $k->waliKelas ? $k->waliKelas->name : '-' }}
+                    <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-all duration-200">
+                        <td class="px-6 py-4 font-medium text-gray-900">{{ $k->nama_kelas }}</td>
+                        <td class="px-6 py-4">
+                            @if ($k->waliKelas)
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                                    {{ $k->waliKelas->name }}
+                                </span>
+                            @else
+                                <span class="text-gray-400 italic">-</span>
+                            @endif
                         </td>
-                        <td class="px-6 py-3 flex items-center justify-center gap-3">
+                        <td class="px-6 py-4 flex items-center justify-center gap-3">
                             <a href="{{ route('kelas.edit', $k->id) }}"
-                                class="inline-flex items-center text-blue-600 hover:text-blue-800 transition">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Edit
+                                class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-medium transition">
+                                ✏️ Edit
                             </a>
-                            <form action="{{ route('kelas.destroy', $k->id) }}" method="POST"
-                                class="inline-block delete-form">
+                            <form action="{{ route('kelas.destroy', $k->id) }}" method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="btn-delete inline-flex items-center text-red-600 hover:text-red-800 transition">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Hapus
+                                    class="btn-delete inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-medium transition">
+                                    🗑️ Hapus
                                 </button>
                             </form>
                         </td>
@@ -67,35 +62,38 @@
         </table>
     </div>
 
-    {{-- Mobile --}}
+    <div class="hidden md:flex justify-center mt-6">
+        {{ $kelas->links('vendor.pagination.tailwind') }}
+    </div>
+
+    <!-- Mobile -->
     <div class="space-y-4 md:hidden">
         @forelse($kelas as $k)
-            <div class="bg-white p-4 rounded-lg shadow border border-gray-200">
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-100 hover:shadow-lg transition-all">
                 <div class="flex flex-col gap-1">
-                    <p class="text-gray-800 font-semibold">{{ $k->nama_kelas }}</p>
-                    <p class="text-gray-600 text-sm">Wali Kelas: {{ $k->waliKelas ? $k->waliKelas->name : '-' }}</p>
+                    <p class="text-gray-900 font-semibold">{{ $k->nama_kelas }}</p>
+                    <p class="text-gray-600 text-sm">
+                        Wali Kelas:
+                        @if ($k->waliKelas)
+                            <span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">
+                                {{ $k->waliKelas->name }}
+                            </span>
+                        @else
+                            <span class="italic text-gray-400">-</span>
+                        @endif
+                    </p>
                 </div>
-                <div class="mt-3 flex items-center gap-4">
+                <div class="mt-3 flex items-center gap-3">
                     <a href="{{ route('kelas.edit', $k->id) }}"
-                        class="inline-flex items-center text-blue-600 hover:text-blue-800 transition text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Edit
+                        class="flex-1 inline-flex justify-center items-center bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1.5 rounded-lg text-sm font-medium transition">
+                        ✏️ Edit
                     </a>
-                    <form action="{{ route('kelas.destroy', $k->id) }}" method="POST" class="inline-block delete-form">
+                    <form action="{{ route('kelas.destroy', $k->id) }}" method="POST" class="flex-1">
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="btn-delete inline-flex items-center text-red-600 hover:text-red-800 transition">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                            Hapus
+                            class="btn-delete w-full inline-flex justify-center items-center bg-red-50 text-red-600 hover:bg-red-100 px-3 py-1.5 rounded-lg text-sm font-medium transition">
+                            🗑️ Hapus
                         </button>
                     </form>
                 </div>
@@ -103,5 +101,42 @@
         @empty
             <p class="text-center text-gray-500">Belum ada data kelas</p>
         @endforelse
+    </div>
+
+    <div class="flex justify-center mt-6 md:hidden gap-1">
+        @if ($kelas->onFirstPage())
+            <span class="px-3 py-1 bg-gray-100 text-gray-400 rounded">Prev</span>
+        @else
+            <a href="{{ $kelas->previousPageUrl() }}" class="px-3 py-1 bg-blue-600 text-white rounded">Prev</a>
+        @endif
+
+        @php
+            $start = max($kelas->currentPage(), 1);
+            $end = min($start + 1, $kelas->lastPage());
+        @endphp
+
+        @for ($i = $start; $i <= $end; $i++)
+            @if ($i == $kelas->currentPage())
+                <span class="px-3 py-1 bg-blue-600 text-white rounded">{{ $i }}</span>
+            @else
+                <a href="{{ $kelas->url($i) }}"
+                    class="px-3 py-1 bg-blue-50 text-blue-600 rounded">{{ $i }}</a>
+            @endif
+        @endfor
+
+        @if ($end < $kelas->lastPage() - 1)
+            <span class="px-2 py-1">…</span>
+        @endif
+
+        @if ($end < $kelas->lastPage())
+            <a href="{{ $kelas->url($kelas->lastPage()) }}"
+                class="px-3 py-1 bg-blue-50 text-blue-600 rounded">{{ $kelas->lastPage() }}</a>
+        @endif
+
+        @if ($kelas->hasMorePages())
+            <a href="{{ $kelas->nextPageUrl() }}" class="px-3 py-1 bg-blue-600 text-white rounded ml-1">Next</a>
+        @else
+            <span class="px-3 py-1 bg-gray-100 text-gray-400 rounded ml-1">Next</span>
+        @endif
     </div>
 @endsection

@@ -10,7 +10,10 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswas = Siswa::with('kelas')->paginate(10);
+        $siswas = Siswa::with('kelas')
+            ->orderBy('nama')
+            ->paginate(10);
+
         return view('admin.siswa.index', compact('siswas'));
     }
 

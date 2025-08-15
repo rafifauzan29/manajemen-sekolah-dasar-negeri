@@ -10,7 +10,10 @@ class GuruController extends Controller
 {
     public function index()
     {
-        $gurus = User::role('guru')->with('kelasYangDiaWali')->get();
+        $gurus = User::role('guru')
+            ->with('kelasYangDiaWali')
+            ->paginate(10);
+
         return view('admin.guru.index', compact('gurus'));
     }
 

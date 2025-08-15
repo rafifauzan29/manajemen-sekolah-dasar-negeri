@@ -76,8 +76,26 @@
                             Kelola Siswa
                         </a>
 
-                        <span class="block px-3 py-2 text-gray-400 cursor-not-allowed">Mapel</span>
-                        <span class="block px-3 py-2 text-gray-400 cursor-not-allowed">Jadwal</span>
+                        <a href="{{ route('mapel.index') }}"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg transition
+                                @if (request()->routeIs('mapel.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            Kelola Mapel
+                        </a>
+
+                        <a href="{{ route('jadwal.index') }}"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg transition
+                                @if (request()->routeIs('jadwal.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10m-12 4h14a2 2 0 002-2V7a2 2 0 00-2-2h-14a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                            </svg>
+                            Kelola Jadwal
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('guru'))
