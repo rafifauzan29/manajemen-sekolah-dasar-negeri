@@ -5,12 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Pengaturan;
 
 class AuthController extends Controller
 {
+
+
     public function showLoginForm()
     {
-        return view('auth.login');
+        $pengaturan = Pengaturan::first();
+        $pengaturan ??= (object) [
+            'nama_sekolah' => 'SDN Cikijing 3',
+            'logo' => 'images/logo.png',
+        ];
+
+        return view('auth.login', compact('pengaturan'));
     }
 
     public function login(Request $request)

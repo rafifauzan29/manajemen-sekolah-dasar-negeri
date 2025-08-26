@@ -12,6 +12,7 @@ use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\RaportController;
 use App\Http\Controllers\JadwalGuruController;
+use App\Http\Controllers\PengaturanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -35,6 +36,7 @@ Route::middleware('auth')->group(function () {
         ]);
         Route::resource('mapel', MapelController::class);
         Route::resource('jadwal', JadwalController::class);
+        Route::resource('pengaturan', PengaturanController::class);
     });
 
     Route::middleware('role:guru')->group(function () {

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - SDN Cikijing 3</title>
+    <title>Login - {{ $pengaturan->nama_sekolah ?? 'SDN Cikijing 3' }}</title>
     @vite('resources/css/app.css')
 </head>
+
 <body class="min-h-screen flex items-center justify-center relative px-4 sm:px-0">
 
     <div class="absolute inset-0">
@@ -15,10 +17,13 @@
     <div class="relative bg-white bg-opacity-90 rounded-lg shadow-lg p-6 sm:p-8 max-w-md w-full mx-auto z-10">
 
         <div class="flex justify-center mb-4">
-            <img src="{{ asset('images/logo.png') }}" alt="Logo SDN Cikijing 3" class="h-12 sm:h-16 w-auto" />
+            <img src="{{ $pengaturan->logo ? asset('storage/' . $pengaturan->logo) : asset('images/logo.png') }}"
+                alt="Logo {{ $pengaturan->nama_sekolah ?? 'SDN Cikijing 3' }}" class="h-12 sm:h-16 w-auto" />
         </div>
 
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">Masuk ke SDN Cikijing 3</h2>
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
+            Masuk ke {{ $pengaturan->nama_sekolah ?? 'SDN Cikijing 3' }}
+        </h2>
 
         @if (session('error'))
             <div class="mb-4 p-3 bg-red-100 text-red-700 rounded">
@@ -55,8 +60,6 @@
                     <input type="checkbox" name="remember" class="form-checkbox h-4 w-4 text-indigo-600" />
                     <span class="ml-2">Ingat saya</span>
                 </label>
-
-                <a href="#" class="text-indigo-600 hover:underline">Lupa kata sandi?</a>
             </div>
 
             <button type="submit"
@@ -66,8 +69,9 @@
         </form>
 
         <p class="mt-6 text-center text-gray-600 text-xs sm:text-sm">
-            &copy; {{ date('Y') }} SDN Cikijing 3. Semua hak dilindungi.
+            &copy; {{ date('Y') }} {{ $pengaturan->nama_sekolah ?? 'SDN Cikijing 3' }}. Semua hak dilindungi.
         </p>
     </div>
 </body>
+
 </html>

@@ -1,6 +1,99 @@
+@php
+    $pengaturan ??= (object) [
+        'nama_sekolah' => 'Manajemen Sekolah',
+        'logo' => 'images/logo.png',
+        'tema' => 'blue',
+    ];
+
+    $warna = session('tema', $pengaturan->tema ?? 'blue');
+
+    $themeMap = [
+        'blue' => [
+            'light' => 'bg-blue-50',
+            'text' => 'text-blue-600',
+            'btn_from' => 'from-[#2563EB]',
+            'btn_to' => 'to-[#1E3A8A]',
+            'hover_from' => 'from-[#1D4ED8]',
+            'hover_to' => 'to-[#1E3A8A]',
+            'ring' => 'focus:ring-[#2563EB]',
+            'bg_nav' => 'bg-[#2563EB]',
+            'sidebar_text' => 'text-white',
+        ],
+        'indigo' => [
+            'light' => 'bg-indigo-50',
+            'text' => 'text-indigo-600',
+            'btn_from' => 'from-[#4F46E5]',
+            'btn_to' => 'to-[#1E40AF]',
+            'hover_from' => 'from-[#4338CA]',
+            'hover_to' => 'to-[#1E40AF]',
+            'ring' => 'focus:ring-[#4F46E5]',
+            'bg_nav' => 'bg-[#4F46E5]',
+            'sidebar_text' => 'text-white',
+        ],
+        'green' => [
+            'light' => 'bg-emerald-50',
+            'text' => 'text-emerald-600',
+            'btn_from' => 'from-[#059669]',
+            'btn_to' => 'to-[#065F46]',
+            'hover_from' => 'from-[#047857]',
+            'hover_to' => 'to-[#065F46]',
+            'ring' => 'focus:ring-[#059669]',
+            'bg_nav' => 'bg-[#059669]',
+            'sidebar_text' => 'text-white',
+        ],
+        'red' => [
+            'light' => 'bg-red-50',
+            'text' => 'text-red-600',
+            'btn_from' => 'from-[#DC2626]',
+            'btn_to' => 'to-[#991B1B]',
+            'hover_from' => 'from-[#B91C1C]',
+            'hover_to' => 'to-[#7F1D1D]',
+            'ring' => 'focus:ring-[#DC2626]',
+            'bg_nav' => 'bg-[#DC2626]',
+            'sidebar_text' => 'text-white',
+        ],
+        'purple' => [
+            'light' => 'bg-purple-50',
+            'text' => 'text-purple-600',
+            'btn_from' => 'from-[#9333EA]',
+            'btn_to' => 'to-[#6D28D9]',
+            'hover_from' => 'from-[#7E22CE]',
+            'hover_to' => 'to-[#5B21B6]',
+            'ring' => 'focus:ring-[#9333EA]',
+            'bg_nav' => 'bg-[#9333EA]',
+            'sidebar_text' => 'text-white',
+        ],
+        'light' => [
+            'light' => 'bg-gray-200',
+            'text' => 'text-gray-800',
+            'btn_from' => 'from-gray-300',
+            'btn_to' => 'to-gray-500',
+            'hover_from' => 'from-gray-400',
+            'hover_to' => 'to-gray-600',
+            'ring' => 'focus:ring-gray-300',
+            'bg_nav' => 'bg-white',
+            'sidebar_text' => 'text-gray-800',
+        ],
+    ];
+
+    $theme = $themeMap[$warna] ?? $themeMap['blue'];
+
+    function isActiveRoute($routes)
+    {
+        if (!is_array($routes)) {
+            $routes = [$routes];
+        }
+        foreach ($routes as $route) {
+            if (request()->routeIs($route)) {
+                return true;
+            }
+        }
+        return false;
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,21 +107,17 @@
 
         <!-- Sidebar -->
         <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
-            class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 shadow-lg transform transition-transform duration-300 ease-in-out -translate-x-full lg:static lg:translate-x-0 flex flex-col px-5 py-6">
-            <!-- Logo -->
+            class="fixed inset-y-0 left-0 z-40 w-64 {{ $theme['bg_nav'] }} border-r border-gray-200 shadow-lg transform transition-transform duration-300 ease-in-out -translate-x-full lg:static lg:translate-x-0 flex flex-col px-5 py-6 {{ $theme['sidebar_text'] }}">
             <div class="flex items-center gap-3 mb-8">
-                <img src="{{ asset('images/logo.png') }}" alt="Logo" class="h-12 w-auto" />
-                <h1 class="text-lg font-bold leading-tight text-gray-800">
-                    Manajemen<br>SDN Cikijing 3
-                </h1>
+                <img src="{{ $pengaturan->logo ? asset('storage/' . $pengaturan->logo) : asset('images/logo.png') }}"
+                    alt="Logo" class="h-12 w-auto" />
+                <h1 class="text-lg font-bold leading-tight">{{ $pengaturan->nama_sekolah ?? 'Manajemen Sekolah' }}</h1>
             </div>
 
-            <!-- Navigation -->
-            <nav class="flex flex-col space-y-2 text-gray-700 text-sm font-medium">
-
+            <nav class="flex flex-col space-y-2 text-sm font-medium">
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        @if (request()->routeIs('dashboard')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                {{ isActiveRoute(['dashboard', 'dashboard.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -43,7 +132,7 @@
 
                         <a href="{{ route('guru.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                                @if (request()->routeIs('guru.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                        {{ isActiveRoute(['guru.index', 'guru.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -54,7 +143,7 @@
 
                         <a href="{{ route('kelas.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                                @if (request()->routeIs('kelas.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                        {{ isActiveRoute(['kelas.index', 'kelas.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -65,7 +154,7 @@
 
                         <a href="{{ route('siswa.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                                @if (request()->routeIs('siswa.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                        {{ isActiveRoute(['siswa.index', 'siswa.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -78,7 +167,7 @@
 
                         <a href="{{ route('mapel.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                                @if (request()->routeIs('mapel.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                        {{ isActiveRoute(['mapel.index', 'mapel.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -88,7 +177,7 @@
 
                         <a href="{{ route('jadwal.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                                @if (request()->routeIs('jadwal.index')) bg-blue-50 text-blue-600 font-semibold @else hover:bg-gray-100 @endif">
+                        {{ isActiveRoute(['jadwal.index', 'jadwal.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -96,27 +185,32 @@
                             </svg>
                             Kelola Jadwal
                         </a>
+
+                        <a href="{{ route('pengaturan.index') }}"
+                            class="flex items-center gap-2 px-3 py-2 rounded-lg transition
+                        {{ isActiveRoute(['pengaturan.index', 'pengaturan.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 11V9a4 4 0 118 0v2m-2 10a2 2 0 002-2v-6H9v6a2 2 0 002 2h6z" />
+                            </svg>
+                            Pengaturan
+                        </a>
                     @endif
 
                     @if (Auth::user()->hasRole('guru'))
                         <span class="mt-6 mb-1 uppercase font-semibold text-xs text-gray-400">Guru Menu</span>
-
                         <span class="block px-3 py-2 text-gray-400 cursor-not-allowed">Absensi</span>
                         <span class="block px-3 py-2 text-gray-400 cursor-not-allowed">Input Nilai</span>
                         <span class="block px-3 py-2 text-gray-400 cursor-not-allowed">Raport</span>
                         <span class="block px-3 py-2 text-gray-400 cursor-not-allowed">Jadwal Mengajar</span>
                     @endif
 
-                    @if (!Auth::user()->hasRole('admin') && !Auth::user()->hasRole('guru'))
-                        <p class="text-xs text-red-500 mt-4">Role belum diassign</p>
-                    @endif
-
-                    <!-- Logout -->
                     <form method="POST" action="{{ route('logout') }}" class="mt-auto">
                         @csrf
                         <button type="submit"
                             class="w-full flex items-center justify-center gap-2 px-3 py-2 mt-6
-                                bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                            bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -140,22 +234,19 @@
         <div class="flex-1 flex flex-col">
 
             <!-- Navbar -->
-            <header class="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
+            <header
+                class="flex items-center justify-between {{ $theme['bg_nav'] }} border-b border-gray-200 px-4 py-3 shadow-sm {{ $theme['sidebar_text'] }}">
                 <div class="flex items-center gap-3">
-                    <!-- Toggle Button -->
-                    <button @click="sidebarOpen = !sidebarOpen"
-                        class="lg:hidden text-gray-600 hover:text-gray-800 focus:outline-none">
+                    <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden hover:opacity-80 focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h2 class="text-xl font-semibold text-gray-800">@yield('header', 'Dashboard')</h2>
+                    <h2 class="text-xl font-semibold">@yield('header', 'Dashboard')</h2>
                 </div>
-                <div class="text-sm text-gray-500">
-                    {{ Auth::user()->name ?? 'Guest' }}
-                </div>
+                <div class="text-sm">{{ Auth::user()->name ?? 'Guest' }}</div>
             </header>
 
             <!-- Page Content -->
@@ -165,7 +256,8 @@
 
             <!-- Footer -->
             <footer class="bg-white border-t border-gray-200 text-center p-4 text-gray-500 text-sm">
-                &copy; {{ date('Y') }} Manajemen Sekolah. All rights reserved.
+                &copy; {{ date('Y') }} {{ $pengaturan->nama_sekolah ?? 'Manajemen Sekolah' }}. All rights
+                reserved.
             </footer>
         </div>
 
@@ -226,5 +318,4 @@
         });
     </script>
 </body>
-
 </html>
