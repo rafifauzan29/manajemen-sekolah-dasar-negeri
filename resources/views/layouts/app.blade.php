@@ -1,99 +1,6 @@
-@php
-    $pengaturan ??= (object) [
-        'nama_sekolah' => 'Manajemen Sekolah',
-        'logo' => 'images/logo.png',
-        'tema' => 'blue',
-    ];
-
-    $warna = session('tema', $pengaturan->tema ?? 'blue');
-
-    $themeMap = [
-        'blue' => [
-            'light' => 'bg-blue-50',
-            'text' => 'text-blue-600',
-            'btn_from' => 'from-[#2563EB]',
-            'btn_to' => 'to-[#1E3A8A]',
-            'hover_from' => 'from-[#1D4ED8]',
-            'hover_to' => 'to-[#1E3A8A]',
-            'ring' => 'focus:ring-[#2563EB]',
-            'bg_nav' => 'bg-[#2563EB]',
-            'sidebar_text' => 'text-white',
-        ],
-        'indigo' => [
-            'light' => 'bg-indigo-50',
-            'text' => 'text-indigo-600',
-            'btn_from' => 'from-[#4F46E5]',
-            'btn_to' => 'to-[#1E40AF]',
-            'hover_from' => 'from-[#4338CA]',
-            'hover_to' => 'to-[#1E40AF]',
-            'ring' => 'focus:ring-[#4F46E5]',
-            'bg_nav' => 'bg-[#4F46E5]',
-            'sidebar_text' => 'text-white',
-        ],
-        'green' => [
-            'light' => 'bg-emerald-50',
-            'text' => 'text-emerald-600',
-            'btn_from' => 'from-[#059669]',
-            'btn_to' => 'to-[#065F46]',
-            'hover_from' => 'from-[#047857]',
-            'hover_to' => 'to-[#065F46]',
-            'ring' => 'focus:ring-[#059669]',
-            'bg_nav' => 'bg-[#059669]',
-            'sidebar_text' => 'text-white',
-        ],
-        'red' => [
-            'light' => 'bg-red-50',
-            'text' => 'text-red-600',
-            'btn_from' => 'from-[#DC2626]',
-            'btn_to' => 'to-[#991B1B]',
-            'hover_from' => 'from-[#B91C1C]',
-            'hover_to' => 'to-[#7F1D1D]',
-            'ring' => 'focus:ring-[#DC2626]',
-            'bg_nav' => 'bg-[#DC2626]',
-            'sidebar_text' => 'text-white',
-        ],
-        'purple' => [
-            'light' => 'bg-purple-50',
-            'text' => 'text-purple-600',
-            'btn_from' => 'from-[#9333EA]',
-            'btn_to' => 'to-[#6D28D9]',
-            'hover_from' => 'from-[#7E22CE]',
-            'hover_to' => 'to-[#5B21B6]',
-            'ring' => 'focus:ring-[#9333EA]',
-            'bg_nav' => 'bg-[#9333EA]',
-            'sidebar_text' => 'text-white',
-        ],
-        'light' => [
-            'light' => 'bg-gray-200',
-            'text' => 'text-gray-800',
-            'btn_from' => 'from-gray-300',
-            'btn_to' => 'to-gray-500',
-            'hover_from' => 'from-gray-400',
-            'hover_to' => 'to-gray-600',
-            'ring' => 'focus:ring-gray-300',
-            'bg_nav' => 'bg-white',
-            'sidebar_text' => 'text-gray-800',
-        ],
-    ];
-
-    $theme = $themeMap[$warna] ?? $themeMap['blue'];
-
-    function isActiveRoute($routes)
-    {
-        if (!is_array($routes)) {
-            $routes = [$routes];
-        }
-        foreach ($routes as $route) {
-            if (request()->routeIs($route)) {
-                return true;
-            }
-        }
-        return false;
-    }
-@endphp
-
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -117,11 +24,10 @@
             <nav class="flex flex-col space-y-2 text-sm font-medium">
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                {{ isActiveRoute(['dashboard', 'dashboard.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    {{ isActiveRoute(['dashboard', 'dashboard.*'], $theme['light'] . ' ' . $theme['text'] . ' font-semibold') }}
                         stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 12l2-2m0 0l7-7 7 7m-9 2v8m4-8h5a2 2 0 012 2v8" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7m-9 2v8m4-8h5a2 2 0 012 2v8" />
                     </svg>
                     Dashboard
                 </a>
@@ -132,7 +38,7 @@
 
                         <a href="{{ route('guru.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        {{ isActiveRoute(['guru.index', 'guru.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                        {{ isActiveRoute(['guru.index', 'guru.*'], $theme['light'] . ' ' . $theme['text'] . ' font-semibold') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -143,7 +49,7 @@
 
                         <a href="{{ route('kelas.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        {{ isActiveRoute(['kelas.index', 'kelas.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                        {{ isActiveRoute(['kelas.index', 'kelas.*'], $theme['light'] . ' ' . $theme['text'] . ' font-semibold') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -154,7 +60,7 @@
 
                         <a href="{{ route('siswa.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        {{ isActiveRoute(['siswa.index', 'siswa.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                        {{ isActiveRoute(['siswa.index', 'siswa.*'], $theme['light'] . ' ' . $theme['text'] . ' font-semibold') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -167,7 +73,7 @@
 
                         <a href="{{ route('mapel.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        {{ isActiveRoute(['mapel.index', 'mapel.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                        {{ isActiveRoute(['mapel.index', 'mapel.*'], $theme['light'] . ' ' . $theme['text'] . ' font-semibold') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -177,7 +83,7 @@
 
                         <a href="{{ route('jadwal.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        {{ isActiveRoute(['jadwal.index', 'jadwal.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                        {{ isActiveRoute(['jadwal.index', 'jadwal.*'], $theme['light'] . ' ' . $theme['text'] . ' font-semibold') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -188,7 +94,7 @@
 
                         <a href="{{ route('pengaturan.index') }}"
                             class="flex items-center gap-2 px-3 py-2 rounded-lg transition
-                        {{ isActiveRoute(['pengaturan.index', 'pengaturan.*']) ? $theme['light'] . ' ' . $theme['text'] . ' font-semibold' : 'hover:bg-gray-100 hover:text-gray-800' }}">
+                        {{ isActiveRoute(['pengaturan.index', 'pengaturan.*'], $theme['light'].' '.$theme['text'].' font-semibold') }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                                 stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -318,4 +224,5 @@
         });
     </script>
 </body>
+
 </html>
